@@ -111,7 +111,7 @@ button {
 }
 
 h2 {
-  color: skyblue;
+  color: #f9f9f9;
   font-style: italic;
   font-weight: 100;
   margin-top: 0;
@@ -201,7 +201,7 @@ h2 {
   font-size: 30px;
   font-weight: bold;
   color: transparent;
-  background-color: #747bff;
+  background-color: #ffffff;
   background-image: repeating-linear-gradient(90deg, transparent, transparent 25px, #87cfebba 25px, #87cfebba 50px);
   background-clip: text;
   animation: color 50s linear infinite;
@@ -220,8 +220,10 @@ h2 {
 }
 
 #intentos {
-  font-size: 18px;
-  width: 100px;
+  font-size: 21px;
+  font-weight: bold;
+  color:#ffffff;
+  width: 150px;
   text-align: center;
   margin: 20px auto;
   border: 1px solid;

@@ -62,9 +62,7 @@ export const mensajePartida = (tablero: Tablero) => {
   }
 };
 
-const mensajeErrorCarta = (okSePuedeVoltear: boolean) => {
-  if (!okSePuedeVoltear) alert("⚠️NO ES POSIBLE VOLTEAR CARTA⚠️");
-};
+const mensajeErrorCarta = () => alert("⚠️NO ES POSIBLE VOLTEAR CARTA⚠️");
 
 export const mostrarIntentos = (intentos: number): void => {
   const divIntentos = document.getElementById("intentos");
@@ -94,20 +92,19 @@ export const atenuarCartas = (indiceA: number, indiceB: number) => {
   }
 };
 
+const voltearCartaBocaAbajo = (indice: number) => {
+  const imagenCarta = document.getElementById(`imagen-${indice}`);
+  const divCarta = document.getElementById(`div-${indice}`);
+  if (esElementoImagen(imagenCarta) && esElementoDiv(divCarta)) {
+    imagenCarta.src = "";
+    divCarta.style.backgroundColor = "skyblue";
+  }
+};
+
 export const cartasBocaAbajo = (indiceA: number, indiceB: number): void => {
   setTimeout(() => {
-    const imagenCartaA = document.getElementById(`imagen-${indiceA}`);
-    const divCartaA = document.getElementById(`div-${indiceA}`);
-    if (esElementoImagen(imagenCartaA) && esElementoDiv(divCartaA)) {
-      imagenCartaA.src = "";
-      divCartaA.style.backgroundColor = "skyblue";
-    }
-    const imagenCartaB = document.getElementById(`imagen-${indiceB}`);
-    const divCartaB = document.getElementById(`div-${indiceB}`);
-    if (esElementoImagen(imagenCartaB) && esElementoDiv(divCartaB)) {
-      imagenCartaB.src = "";
-      divCartaB.style.backgroundColor = "skyblue";
-    }
+    voltearCartaBocaAbajo(indiceA);
+    voltearCartaBocaAbajo(indiceB);
   }, 500);
 };
 
@@ -127,11 +124,11 @@ const gestionCartasVolteadas = (tablero: Tablero): void => {
   const indiceCartaA = tablero.indiceCartaVolteadaA;
   const indiceCartaB = tablero.indiceCartaVolteadaB;
   const okSonPareja = sonPareja(tablero);
+
   if (okSonPareja && indiceCartaA !== undefined && indiceCartaB !== undefined) {
     parejaEncontrada(tablero);
     atenuarCartas(indiceCartaA, indiceCartaB);
     esPartidaCompleta(tablero);
-    mensajePartida(tablero);
   } else if (indiceCartaA !== undefined && indiceCartaB !== undefined) {
     parejaNoEncontrada(tablero);
     cartasBocaAbajo(indiceCartaA, indiceCartaB);
@@ -155,19 +152,22 @@ const handleInicio = () => {
 };
 
 const handleCarta = (tablero: Tablero, indice: number) => {
-  const okSePuedeVoltear = sePuedeVoltearCarta(tablero, indice);
-  mensajeErrorCarta(okSePuedeVoltear);
-  if (okSePuedeVoltear && tablero.estadoPartida !== "PartidaNoIniciada") {
-    efectoGiroCarta(indice);
-    voltearCarta(tablero, indice);
-    asignarIndiceCartasVolteadas(tablero, indice);
-    const okDosCartasLevantadas = comprobarNumeroCartasVolteadas(tablero);
-    if (okDosCartasLevantadas) {
-      sumarIntentos();
-      mostrarIntentos(intentos);
-      gestionCartasVolteadas(tablero);
-    }
+  if (!sePuedeVoltearCarta(tablero, indice) || tablero.estadoPartida === "PartidaNoIniciada") {
+    mensajeErrorCarta();
+    return;
   }
+
+  efectoGiroCarta(indice);
+  voltearCarta(tablero, indice);
+  asignarIndiceCartasVolteadas(tablero, indice);
+
+  if (comprobarNumeroCartasVolteadas(tablero)) {
+    sumarIntentos();
+    mostrarIntentos(intentos);
+    gestionCartasVolteadas(tablero);
+  }
+
+  if (tablero.estadoPartida === "PartidaCompleta") mensajePartida(tablero);
 };
 
 export const eventos = () => {
@@ -175,6 +175,7 @@ export const eventos = () => {
   if (botonInicio && botonInicio instanceof HTMLButtonElement) {
     botonInicio.addEventListener("click", handleInicio);
   }
+
   for (let indice = 0; indice <= cartas.length; indice++) {
     const divCarta = document.getElementById(`div-${indice}`);
     if (esElementoDiv(divCarta)) {
