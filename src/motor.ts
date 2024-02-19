@@ -27,41 +27,40 @@ export const comprobarNumeroCartasVolteadas = (tablero: Tablero): boolean => {
     : false;
 };
 
-export const sonPareja = (tablero: Tablero): boolean => {
-  const indiceCartaA = tablero.indiceCartaVolteadaA;
-  const indiceCartaB = tablero.indiceCartaVolteadaB;
-  if (indiceCartaA !== undefined && indiceCartaB !== undefined) {
-    const cartaA = tablero.cartas[indiceCartaA];
-    const cartaB = tablero.cartas[indiceCartaB];
-    return cartaA.idFoto === cartaB.idFoto;
-  }
-  return false;
+export const sonPareja = (
+  indiceCartaA: number,
+  indiceCartaB: number,
+  tablero: Tablero
+): boolean => {
+  const cartaA = tablero.cartas[indiceCartaA];
+  const cartaB = tablero.cartas[indiceCartaB];
+  return cartaA.idFoto === cartaB.idFoto;
 };
 
-export const parejaEncontrada = (tablero: Tablero): void => {
-  const indiceCartaA = tablero.indiceCartaVolteadaA;
-  const indiceCartaB = tablero.indiceCartaVolteadaB;
-  if (indiceCartaA !== undefined && indiceCartaB !== undefined) {
-    const cartaA = tablero.cartas[indiceCartaA];
-    const cartaB = tablero.cartas[indiceCartaB];
-    cartaA.encontrada = true;
-    cartaB.encontrada = true;
-    tablero.indiceCartaVolteadaA = undefined;
-    tablero.indiceCartaVolteadaB = undefined;
-  }
+export const parejaEncontrada = (
+  indiceCartaA: number,
+  indiceCartaB: number,
+  tablero: Tablero
+): void => {
+  const cartaA = tablero.cartas[indiceCartaA];
+  const cartaB = tablero.cartas[indiceCartaB];
+  cartaA.encontrada = true;
+  cartaB.encontrada = true;
+  tablero.indiceCartaVolteadaA = undefined;
+  tablero.indiceCartaVolteadaB = undefined;
 };
 
-export const parejaNoEncontrada = (tablero: Tablero): void => {
-  const indiceCartaA = tablero.indiceCartaVolteadaA;
-  const indiceCartaB = tablero.indiceCartaVolteadaB;
-  if (indiceCartaA !== undefined && indiceCartaB !== undefined) {
-    const cartaA = tablero.cartas[indiceCartaA];
-    const cartaB = tablero.cartas[indiceCartaB];
-    cartaA.estaVuelta = false;
-    cartaB.estaVuelta = false;
-    tablero.indiceCartaVolteadaA = undefined;
-    tablero.indiceCartaVolteadaB = undefined;
-  }
+export const parejaNoEncontrada = (
+  indiceCartaA: number,
+  indiceCartaB: number,
+  tablero: Tablero
+): void => {
+  const cartaA = tablero.cartas[indiceCartaA];
+  const cartaB = tablero.cartas[indiceCartaB];
+  cartaA.estaVuelta = false;
+  cartaB.estaVuelta = false;
+  tablero.indiceCartaVolteadaA = undefined;
+  tablero.indiceCartaVolteadaB = undefined;
 };
 
 export const sumarIntentos = (): void => {
